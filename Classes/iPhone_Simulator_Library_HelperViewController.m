@@ -22,7 +22,7 @@
 	UIFont* logFont = [UIFont fontWithName:@"Monaco" size:9];
 	results_log.font = logFont;
 
-	NSMutableString* resourceFullPath = [[[NSMutableString alloc] init] autorelease];
+	NSMutableString* resourceFullPath = [[NSMutableString alloc] init];
 	[resourceFullPath setString:[[NSBundle mainBundle] resourcePath]];
 	NSDirectoryEnumerator* itr = [[NSFileManager defaultManager] enumeratorAtPath:resourceFullPath];
 	NSString* obj;
@@ -82,8 +82,4 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)dealloc {
-    [images release];
-    [super dealloc];
-}
 @end

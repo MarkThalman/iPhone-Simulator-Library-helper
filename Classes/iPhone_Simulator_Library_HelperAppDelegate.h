@@ -15,8 +15,8 @@
     iPhone_Simulator_Library_HelperViewController *viewController;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet iPhone_Simulator_Library_HelperViewController *viewController;
+@property (nonatomic, strong) IBOutlet UIWindow *window;
+@property (nonatomic, strong) IBOutlet iPhone_Simulator_Library_HelperViewController *viewController;
 
 @end
 
