@@ -22,12 +22,12 @@
 	UIFont* logFont = [UIFont fontWithName:@"Monaco" size:9];
 	results_log.font = logFont;
 
-	NSMutableString* resourceFullPath = [[NSMutableString alloc] init];
+	NSMutableString* resourceFullPath = [[[NSMutableString alloc] init] autorelease];
 	[resourceFullPath setString:[[NSBundle mainBundle] resourcePath]];
 	NSDirectoryEnumerator* itr = [[NSFileManager defaultManager] enumeratorAtPath:resourceFullPath];
 	NSString* obj;
 	
-	while (obj = [itr nextObject])
+	while ((obj = [itr nextObject]))
 	{
 		if(([[obj pathExtension] isEqualToString:@"png"] || 
 			[[obj pathExtension] isEqualToString:@"jpg"] ||
@@ -40,14 +40,14 @@
 			[results_log setText:[NSString stringWithFormat:@"%@\nAdding:%@", [results_log text], obj]];
 			[results_log setText:[NSString stringWithFormat:@"%@\nAdding:%@", [results_log text], obj]];
 			
-			// Autoscroll, but it requires a touch before it starts wroking.
+			// Autoscroll, but it requires a touch before it starts working.
 			CGSize scrSize = [results_log contentSize];
 			[results_log scrollRectToVisible:CGRectMake(0, scrSize.height, scrSize.width, 5) animated:YES];
 		}
 	}
 
-	int objIndex = 0;
-	NSString* imageFullPath = [images objectAtIndex:objIndex];
+	NSUInteger objIndex = 0;
+	NSString* imageFullPath = images[objIndex];
 	UIImage* image = [UIImage imageWithContentsOfFile:imageFullPath];
 	UIImageWriteToSavedPhotosAlbum(image, self, @selector(image:didFinishSavingWithError:contextInfo:), &objIndex);
 }
@@ -55,8 +55,8 @@
 
 - (void)image:(UIImage*)image didFinishSavingWithError:(NSError*)error contextInfo:(void *)contextInfo
 {
-	int objIndex = 0;
-	[results_log setText:[NSString stringWithFormat:@"%@\nFinished saving %@ error:%@", [results_log text], [[images objectAtIndex:objIndex] lastPathComponent], error]];
+	NSUInteger objIndex = 0;
+	[results_log setText:[NSString stringWithFormat:@"%@\nFinished saving %@ error:%@", [results_log text], [images[objIndex] lastPathComponent], error]];
 
 	CGSize scrSize = [results_log contentSize];
 	[results_log scrollRectToVisible:CGRectMake(0, scrSize.height, scrSize.width, 5) animated:YES];
@@ -65,7 +65,7 @@
 	
 	if ([images count] > 0)
 	{
-		NSString* imageFullPath = [images objectAtIndex:objIndex];
+		NSString* imageFullPath = images[objIndex];
 		UIImage* theImage = [UIImage imageWithContentsOfFile:imageFullPath];
 		if(image)
 			UIImageWriteToSavedPhotosAlbum(theImage, self, @selector(image:didFinishSavingWithError:contextInfo:), (void*)&objIndex);
@@ -82,10 +82,8 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewDidUnload
-{
-	// Release any retained subviews of the main view.
-	// e.g. self.myOutlet = nil;
-	[images release];
+- (void)dealloc {
+    [images release];
+    [super dealloc];
 }
 @end
